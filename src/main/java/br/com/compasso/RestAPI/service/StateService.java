@@ -2,11 +2,15 @@ package br.com.compasso.RestAPI.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import br.com.compasso.RestAPI.controller.form.StateForm;
 import br.com.compasso.RestAPI.dto.StateDTO;
 import br.com.compasso.RestAPI.entity.State;
 import br.com.compasso.RestAPI.repository.StateRepository;
@@ -17,14 +21,16 @@ public class StateService {
 	@Autowired
 	private StateRepository stateRepository;
 	
-	public void save(@RequestBody StateDTO stateDTO) {
+	@Transactional
+	public StateDTO save(@RequestBody StateForm form) {
 		State stateEntity = new State();
-		stateEntity.setNome(stateDTO.getNome());
-		stateEntity.setRegiao(stateDTO.getRegiao());
-		stateEntity.setPopulacao(stateDTO.getPopulacao());
-		stateEntity.setCapital(stateDTO.getCapital());
-		stateEntity.setArea(stateDTO.getArea());
+		stateEntity.setNome(form.getNome());
+		stateEntity.setRegiao(form.getRegiao());
+		stateEntity.setPopulacao(form.getPopulacao());
+		stateEntity.setCapital(form.getCapital());
+		stateEntity.setArea(form.getArea());
 		stateRepository.save(stateEntity);
+		return new StateDTO(stateEntity);
 	}
 
 	public List<StateDTO> findAll(){
@@ -32,6 +38,7 @@ public class StateService {
 		List<State> stateEntities = stateRepository.findAll();
 		stateEntities.stream().forEach(object -> {
 			StateDTO stateDTO = new StateDTO();
+			stateDTO.setId(object.getId());
 			stateDTO.setNome(object.getNome());
 			stateDTO.setRegiao(object.getRegiao());
 			stateDTO.setPopulacao(object.getPopulacao());
@@ -40,5 +47,25 @@ public class StateService {
 			stateDTOS.add(stateDTO);
 		});
 		return stateDTOS;
+	}
+
+	public StateDTO findById(Optional<State> state) {
+		return new StateDTO(state.get());
+	}
+
+	public StateDTO update(Long id, StateForm form) {
+		State state = stateRepository.getOne(id);
+		if(form.getNome() != null)state.setNome(form.getNome());
+		if(form.getRegiao() != null)state.setRegiao(form.getRegiao());
+		if(form.getPopulacao() != null)state.setPopulacao(form.getPopulacao());
+		if(form.getCapital() != null)state.setCapital(form.getCapital());
+		if(form.getArea() != null)state.setArea(form.getArea());
+		
+		return new StateDTO(state);
+	}
+
+	public void delete(Long id) {
+		stateRepository.deleteById(id);
+		return;
 	}
 }

@@ -27,5 +27,5 @@ public class State implements Serializable{
 
 	private String capital;
 	
-	private Integer area;
+	private Double area;
 }
