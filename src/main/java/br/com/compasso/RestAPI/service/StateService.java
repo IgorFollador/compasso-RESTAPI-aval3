@@ -1,17 +1,18 @@
 package br.com.compasso.RestAPI.service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import br.com.compasso.RestAPI.controller.form.StateForm;
 import br.com.compasso.RestAPI.dto.StateDTO;
+import br.com.compasso.RestAPI.entity.Regiao;
 import br.com.compasso.RestAPI.entity.State;
 import br.com.compasso.RestAPI.repository.StateRepository;
 
@@ -33,20 +34,17 @@ public class StateService {
 		return new StateDTO(stateEntity);
 	}
 
-	public List<StateDTO> findAll(){
-		List<StateDTO> stateDTOS = new ArrayList<>();
-		List<State> stateEntities = stateRepository.findAll();
-		stateEntities.stream().forEach(object -> {
-			StateDTO stateDTO = new StateDTO();
-			stateDTO.setId(object.getId());
-			stateDTO.setNome(object.getNome());
-			stateDTO.setRegiao(object.getRegiao());
-			stateDTO.setPopulacao(object.getPopulacao());
-			stateDTO.setCapital(object.getCapital());
-			stateDTO.setArea(object.getArea());
-			stateDTOS.add(stateDTO);
-		});
-		return stateDTOS;
+	public Page<StateDTO> find(Pageable paginacao, String reg){
+		if(reg == null) {
+			Page<State> state = stateRepository.findAll(paginacao);
+			Page<StateDTO> stateDTOS = state.map(StateDTO::new);
+			return stateDTOS;
+		} else {
+			Regiao regiao = Regiao.valueOf(reg);
+			Page<State> state = stateRepository.findByRegiao(paginacao, regiao);
+			Page<StateDTO> stateDTOS = state.map(StateDTO::new);
+			return stateDTOS;
+		}
 	}
 
 	public StateDTO findById(Optional<State> state) {

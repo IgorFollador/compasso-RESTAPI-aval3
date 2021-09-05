@@ -1,11 +1,14 @@
 package br.com.compasso.RestAPI.controller;
 
-import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,10 +17,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.compasso.RestAPI.controller.form.StateForm;
 import br.com.compasso.RestAPI.dto.StateDTO;
+import br.com.compasso.RestAPI.entity.Regiao;
 import br.com.compasso.RestAPI.entity.State;
 import br.com.compasso.RestAPI.repository.StateRepository;
 import br.com.compasso.RestAPI.service.StateService;
@@ -36,8 +41,9 @@ public class StatesController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<StateDTO>> listAll(){
-		return ResponseEntity.ok(stateService.findAll());
+	public ResponseEntity<Page<StateDTO>> list(@RequestParam(required = false) String reg,
+			@PageableDefault(sort = "id", direction = Direction.ASC) Pageable paginacao){
+		return ResponseEntity.ok(stateService.find(paginacao, reg));
 	}
 	
 	@GetMapping("/{id}")
@@ -70,4 +76,6 @@ public class StatesController {
 		}
 		return ResponseEntity.notFound().build();
 	}
+	
+	
 }
