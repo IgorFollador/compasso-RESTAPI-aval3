@@ -1,3 +1,4 @@
+USE restapi_igorf;
 INSERT INTO CAR(chassi, nome, marca, cor, valor, ano_fabricacao) VALUES("9BBNSZPPA288003333", "New Fiesta", "Ford", "Branco", 28.100, 2015);
 INSERT INTO CAR(chassi, nome, marca, cor, valor, ano_fabricacao) VALUES("21Axv51UuGM9F6154", "Doblo", "Fiat", "Branco", 30.500, 2009);
 INSERT INTO CAR(chassi, nome, marca, cor, valor, ano_fabricacao) VALUES("60AsEZwbYm5U99584", "Argo", "Fiat", "Preto", 50.300, 2021);
