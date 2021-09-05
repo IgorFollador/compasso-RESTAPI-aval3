@@ -9,23 +9,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.compasso.RestAPI.dto.CarDTO;
-import br.com.compasso.RestAPI.service.CarService;
+import br.com.compasso.RestAPI.dto.StateDTO;
+import br.com.compasso.RestAPI.service.StateService;
 
 @RestController
-public class CarController {
+public class StatesController {
 	
-	@Autowired CarService carService;
+	@Autowired StateService stateService;
 	
-	@PostMapping("/api/cars/")
-	public ResponseEntity<Void> createCar(@RequestBody CarDTO car) {
-		carService.save(car);
+	@PostMapping("/api/states/")
+	public ResponseEntity<Void> createState(@RequestBody StateDTO state) {
+		stateService.save(state);
 		return ResponseEntity.created(null).build();
 	}
 	
-	@GetMapping("/api/cars/")
-	public ResponseEntity<List<CarDTO>> listAll(){
-		return ResponseEntity.ok(carService.findAll());
+	@GetMapping("/api/states/")
+	public ResponseEntity<List<StateDTO>> listAll(){
+		return ResponseEntity.ok(stateService.findAll());
 	}
-	
 }

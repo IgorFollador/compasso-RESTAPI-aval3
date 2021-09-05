@@ -12,12 +12,12 @@ import br.com.compasso.RestAPI.entity.Car;
 import br.com.compasso.RestAPI.repository.CarRepository;
 
 @Service
-public class CarService {
+public class CarService{
 	
 	@Autowired
 	private CarRepository carRepository;
 	
-	public void createCar(@RequestBody CarDTO carDTO) {
+	public void save(@RequestBody CarDTO carDTO) {
 		Car carEntity = new Car();
 		carEntity.setChassi(carDTO.getChassi());
 		carEntity.setNome(carDTO.getNome());
@@ -28,7 +28,7 @@ public class CarService {
 		carRepository.save(carEntity);
 	}
 	
-	public List<CarDTO> listAll(){
+	public List<CarDTO> findAll(){
 		List<CarDTO> carDTOS = new ArrayList<>();
 		List<Car> carEntities = carRepository.findAll();
 		carEntities.stream().forEach(object -> {
