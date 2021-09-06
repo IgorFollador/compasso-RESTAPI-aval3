@@ -1,0 +1,330 @@
+openapi: 3.0.1
+info: 
+  title: "API REST - Avaliação Compasso UOL"
+  description: "API com finalidade de realizar a filtragem e ordenação da enditade 'Cars' e realizar o CRUD, filtragem e ordenação da entidade 'States'."
+  version: 1.0.0
+  termsOfService: https://compassouol.com/
+  contact:
+    name: "Igor Dallazen Follador"
+    email: igorledf@hotmail.com
+  license:
+    name: "Licença GPLv3" 
+    url: https://www.gnu.org/licenses/gpl-3.0.html
+servers:
+- url: http://localhost:8080/api
+  description: "API Local"
+paths:
+  name: "CarAPI"
+  /cars:
+    get: 
+      summary: "Lista todos os modelos cadastrados"
+      responses:
+        200:
+          description: "Sucesso"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CarDTOS"
+    post:
+      summary: "Persiste um novo modelo de carro"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CarDTOS"
+      responses:
+        201:
+          description: "Sucesso"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CarDTOS"
+  /cars/?marca={marca}:
+    parameters: 
+        - name: marca
+          in: path
+          schema:
+            type: string
+          required: true
+    get:
+      summary: "Retorna todos os modelos de carros de determinada marca"
+      responses:
+        200:
+          description: "Sucesso"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CarDTOS"
+        404:
+          description: "Nenhum modelo de carro foi encontrado"
+          content:
+            application/json:
+              example: "Not Found"
+  /cars/?nome={nome}:
+      parameters: 
+        - name: nome
+          in: path
+          schema:
+            type: string
+          required: true
+      get:
+        summary: "Retorna todos os modelos de carros com determinado nome"
+        responses:
+          200:
+            description: "Sucesso"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/CarDTOS"
+          404:
+            description: "Nenhum modelo de carro foi encontrado"
+            content:
+              application/json:
+                example: "Not Found"
+  /cars/?cor={cor}:
+      parameters: 
+        - name: cor
+          in: path
+          schema:
+            type: string
+          required: true
+      get:
+        summary: "Retorna todos os modelos de carros com determinada cor"
+        responses:
+          200:
+            description: "Sucesso"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/CarDTOS"
+          404:
+            description: "Nenhum modelo de carro foi encontrado"
+            content:
+              application/json:
+                example: "Not Found" 
+  /cars/?sort=nome,asc:
+      get:
+        summary: "Retorna todos os modelos de carros ordenados por nome, em ordem alfabética"
+        responses:
+          200:
+            description: "Sucesso"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/CarDTOS"
+          404:
+            description: "Nenhum modelo de carro foi encontrado"
+            content:
+              application/json:
+                example: "Not Found" 
+  /cars/?sort=valor,asc:
+      get:
+        summary: "Retorna todos os modelos de carros ordenados por valor, em ordem crescente"
+        responses:
+          200:
+            description: "Sucesso"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/CarDTOS"
+          404:
+            description: "Nenhum modelo de carro foi encontrado"
+            content:
+              application/json:
+                example: "Not Found" 
+  /cars/?sort=anoFabricacao,asc:
+      get:
+        summary: "Retorna todos os modelos de carros ordenados por ano de fabricação, em ordem crescente"
+        responses:
+          200:
+            description: "Sucesso"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/CarDTOS"
+          404:
+            description: "Nenhum modelo de carro foi encontrado"
+            content:
+              application/json:
+                example: "Not Found" 
+  
+  /states/:
+    post:
+      summary: "Persiste um novo estado no BD"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StateSave"
+      responses:
+        201:
+          description: "Sucesso"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StateDTO"
+    get: 
+      summary: "Retorna todos os estados persistidos no BD"
+      responses:
+        200:
+          description: "Sucesso"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StateDTOS"
+    put:
+      summary: "Atualiza um estado"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StateSave"
+      responses:
+        200:
+          description: "Sucesso"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StateDTO"
+        404:
+          description: "Estado não encontrado"
+          content:
+            application/json:
+              example: "Not Found"
+    delete:
+      summary: "Remove uma estado"
+      responses:
+        200:
+          description: "Sucesso"
+        404:
+          description: "Estado não encontrada"
+          content:
+            application/json:
+              example: "Not Found"
+  /state/{id}:
+    parameters: 
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+    get:
+      summary: "Retorna um estado através de um ID passado no parâmetro da URI"
+      responses:
+        200:
+          description: "Sucesso"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StateDTO"
+        404:
+          description: "Nenhum estado foi encontrado"
+          content:
+            application/json:
+              example: "Not Found"
+  /state/?reg={reg}:
+    parameters: 
+      - name: reg
+        in: path
+        schema:
+          type: string
+        required: true
+    get:
+      summary: "Retorna todos os estados de determinada região"
+      responses:
+        200:
+          description: "Sucesso"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StatesDTOS"
+        404:
+          description: "Nenhum estado foi encontrado"
+          content:
+            application/json:
+              example: "Not Found" 
+  /state/?sort=populacao,desc:
+    get:
+      summary: "Retorna todos os estados ordenados de forma decrescente de população"
+      responses:
+        200:
+          description: "Sucesso"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StatesDTOS"
+        404:
+          description: "Nenhum estado foi encontrado"
+          content:
+            application/json:
+              example: "Not Found"
+  /state/?sort=area,desc:
+    get:
+      summary: "Retorna todos os estados ordenados de forma decrescente de área"
+      responses:
+        200:
+          description: "Sucesso"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StatesDTOS"
+        404:
+          description: "Nenhum estado foi encontrado"
+          content:
+            application/json:
+              example: "Not Found"
+components:
+  schemas:
+    CarDTO:
+      type: object
+      properties:
+        chassi:
+          type: string
+        nome:
+          type: string
+        marca:
+          type: string
+        cor:
+          type: string
+        valor:
+          type: number
+        anoFabricao:
+          type: integer
+        descricao:
+          type: string
+    CarDTOS:
+      type: array
+      items:
+        $ref: "#/components/schemas/CarDTO"
+    StateDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        regiao:
+          type: string
+        populacao:
+          type: integer
+        capital:
+          type: string
+        area:
+          type: number
+    StateDTOS:
+      type: array
+      items:
+        $ref: "#/components/schemas/StateDTO"
+    StateSave:
+      type: object
+      properties:
+        nome:
+          type: string
+        regiao:
+          type: string
+        populacao:
+          type: integer
+        capital:
+          type: string
+        area:
+          type: number
