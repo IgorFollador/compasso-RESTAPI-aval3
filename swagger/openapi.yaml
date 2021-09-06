@@ -42,10 +42,11 @@ paths:
   /cars/?marca={marca}:
     parameters: 
         - name: marca
-          in: path
+          in: query
           schema:
             type: string
           required: true
+          example: fiat
     get:
       summary: "Retorna todos os modelos de carros de determinada marca"
       responses:
@@ -61,12 +62,13 @@ paths:
             application/json:
               example: "Not Found"
   /cars/?nome={nome}:
-      parameters: 
-        - name: nome
-          in: path
-          schema:
-            type: string
-          required: true
+    parameters: 
+      - name: nome
+        in: query
+        schema:
+          type: string
+        required: true
+        example: corolla
       get:
         summary: "Retorna todos os modelos de carros com determinado nome"
         responses:
@@ -84,10 +86,11 @@ paths:
   /cars/?cor={cor}:
       parameters: 
         - name: cor
-          in: path
+          in: query
           schema:
             type: string
           required: true
+          example: branco
       get:
         summary: "Retorna todos os modelos de carros com determinada cor"
         responses:
@@ -223,12 +226,13 @@ paths:
             application/json:
               example: "Not Found"
   /state/?reg={reg}:
-    parameters: 
-      - name: reg
-        in: path
+    parameters:
+      - in: query
+        name: reg
         schema:
           type: string
-        required: true
+          enum: [NORTE, NORDESTE, SUL, SUDESTE, CENTRO_OESTE]
+          example: NORDESTE
     get:
       summary: "Retorna todos os estados de determinada região"
       responses:
@@ -237,7 +241,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/StatesDTOS"
+                $ref: "#/components/schemas/StateDTOS"
         404:
           description: "Nenhum estado foi encontrado"
           content:
@@ -252,7 +256,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/StatesDTOS"
+                $ref: "#/components/schemas/StateDTOS"
         404:
           description: "Nenhum estado foi encontrado"
           content:
@@ -267,7 +271,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/StatesDTOS"
+                $ref: "#/components/schemas/StateDTOS"
         404:
           description: "Nenhum estado foi encontrado"
           content:
